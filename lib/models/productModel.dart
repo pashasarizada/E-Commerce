@@ -1,6 +1,7 @@
 class ProductModel {
   final String productId;
   final String ownerId;
+  final String ownerEmail;
   final String title;
   final String description;
   final double price;
@@ -9,17 +10,10 @@ class ProductModel {
   final String? location;
   final List<String> likedBy;
 
-  ProductModel({
-    required this.productId,
-    required this.ownerId,
-    required this.title,
-    required this.description,
-    required this.price,
-    required this.imageUrl,
-    required this.createdAt,
-    this.location,
-    required this.likedBy,
-  });
+
+  ProductModel(this.productId, this.ownerId, this.ownerEmail, this.title,
+      this.description, this.price, this.imageUrl, this.createdAt,
+      this.location, this.likedBy);
 
   Map<String, dynamic> toMap() {
     return {
@@ -32,6 +26,7 @@ class ProductModel {
       'createdAt': createdAt.toIso8601String(),
       'location': location,
       'likedBy': likedBy,
+
     };
   }
 
@@ -39,6 +34,7 @@ class ProductModel {
     return ProductModel(
       productId: map['productId'],
       ownerId: map['ownerId'],
+      ownerEmail: map['ownerEmail'],
       title: map['title'],
       description: map['description'],
       price: map['price'].toDouble(),

@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
+import 'package:ecom/views/main/productDetailView.dart';
 class HomePageView extends StatelessWidget {
   const HomePageView({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Ürünler")),
+      appBar: AppBar(title: const Text("Ürünler"),
+        automaticallyImplyLeading: false,
+      ),
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
             .collection('products')
@@ -27,7 +29,7 @@ class HomePageView extends StatelessWidget {
           return GridView.builder(
             padding: const EdgeInsets.all(16),
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2, // 2 sütun
+              crossAxisCount: 2,
               crossAxisSpacing: 10,
               mainAxisSpacing: 10,
               childAspectRatio: 0.75,
@@ -35,11 +37,22 @@ class HomePageView extends StatelessWidget {
             itemCount: products.length,
             itemBuilder: (context, index) {
               final data = products[index].data() as Map<String, dynamic>;
-              final imageUrl = data['imageUrls'][0]; // ilk resmi alıyoruz
+              final imageUrl = data['imageUrls'][0];
               final title = data['title'];
               final price = data['price'];
+              final owner = data['ownerEmail'] ?? 'Bilinmiyor';
 
-              return Container(
+              return GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => ProductDetailView(product: data),
+                    ),
+                  );
+                },
+
+                child: Container(
                 decoration: BoxDecoration(
                   color: Colors.grey[100],
                   borderRadius: BorderRadius.circular(10),
@@ -71,12 +84,14 @@ class HomePageView extends StatelessWidget {
                           Text(title, maxLines: 1, overflow: TextOverflow.ellipsis),
                           const SizedBox(height: 4),
                           Text("₺${price.toString()}", style: const TextStyle(fontWeight: FontWeight.bold)),
+                          Text("İlan Sahibi: $owner"),
+
                         ],
                       ),
                     )
                   ],
                 ),
-              );
+              ));
             },
           );
         },

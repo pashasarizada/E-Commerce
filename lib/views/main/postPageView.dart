@@ -4,6 +4,7 @@ import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../services/imageUploadService.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class PostPageView extends StatefulWidget {
   const PostPageView({super.key});
@@ -20,6 +21,7 @@ class _PostPageViewState extends State<PostPageView> {
 
   final List<XFile> _selectedImages = [];
   final ImagePicker _picker = ImagePicker();
+  final currentUser = FirebaseAuth.instance.currentUser;
 
   bool _isUploading = false;
 
@@ -65,7 +67,10 @@ class _PostPageViewState extends State<PostPageView> {
         'location': location.isEmpty ? null : location,
         'imageUrls': imageUrls,
         'createdAt': Timestamp.now(),
+        'ownerId': currentUser?.uid,
+        'ownerEmail': currentUser?.email,
       });
+
 
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Ürün başarıyla yayınlandı!')),
@@ -84,12 +89,12 @@ class _PostPageViewState extends State<PostPageView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Ürün Ekle')),
+      appBar: AppBar(title: const Text('Put It on Sale'),automaticallyImplyLeading: false,
+      ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
-            // FOTOĞRAF SEÇME
             Row(
               children: [
                 GestureDetector(
