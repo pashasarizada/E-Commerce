@@ -55,12 +55,10 @@ class AuthService {
     }
   }
 
-  // Çıkış Yap
   Future<void> logout() async {
     await _firebaseAuth.signOut();
   }
 
-  // Şu anki kullanıcı
   User? get currentUser => _firebaseAuth.currentUser;
 
 }

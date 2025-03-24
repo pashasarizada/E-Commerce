@@ -1,51 +1,18 @@
 import 'package:flutter/material.dart';
 import '../services/authService.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../viewmodels/loginViewModel.dart';
 
-class LoginView extends StatefulWidget {
-  const LoginView({Key? key}) : super(key: key);
-
-  @override
-  State<LoginView> createState() => _LoginViewState();
-}
-
-class _LoginViewState extends State<LoginView> {
-  final _userEmailController = TextEditingController();
-  final _userPasswordController = TextEditingController();
-
-  final _authService = AuthService();
-
-  bool _loading = false;
-  String? _error;
-
-  void _login() async {
-    setState(() {
-      _loading = true;
-      _error = null;
-    });
-
-    final user = await _authService.login(
-      userEmail: _userEmailController.text.trim(),
-      userPassword: _userPasswordController.text.trim(),
-    );
-
-    setState(() {
-      _loading = false;
-    });
-
-    if (user != null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Giriş başarılı! ✅')),
-      );
-      // TODO: Navigate to Home Page
-    } else {
-      setState(() {
-        _error = 'Giriş başarısız. Bilgileri kontrol et.';
-      });
-    }
-  }
+class LoginView extends StatelessWidget {
+  const LoginView({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final loginVM = Provider.of<LoginViewModel>(context);
+    final _emailController = TextEditingController();
+    final _passwordController = TextEditingController();
+
     return Scaffold(
       appBar: AppBar(title: Text('Giriş Yap')),
       body: Padding(
@@ -53,23 +20,34 @@ class _LoginViewState extends State<LoginView> {
         child: Column(
           children: [
             TextField(
-              controller: _userEmailController,
+              controller: _emailController,
               decoration: InputDecoration(labelText: 'Email'),
-              keyboardType: TextInputType.emailAddress,
             ),
             TextField(
-              controller: _userPasswordController,
+              controller: _passwordController,
               decoration: InputDecoration(labelText: 'Şifre'),
               obscureText: true,
             ),
-            SizedBox(height: 20),
-            if (_error != null)
-              Text(_error!, style: TextStyle(color: Colors.red)),
-            _loading
-                ? CircularProgressIndicator()
+            const SizedBox(height: 20),
+            if (loginVM.errorMessage != null)
+              Text(loginVM.errorMessage!, style: TextStyle(color: Colors.red)),
+            loginVM.isLoading
+                ? const CircularProgressIndicator()
                 : ElevatedButton(
-              onPressed: _login,
-              child: Text('Giriş Yap'),
+              onPressed: () async {
+                await loginVM.login(
+                  email: _emailController.text.trim(),
+                  password: _passwordController.text.trim(),
+                );
+
+                if (loginVM.user != null) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text("Giriş başarılı!")),
+                  );
+                  // TODO: Navigate to Home Page
+                }
+              },
+              child: const Text('Giriş Yap'),
             ),
           ],
         ),

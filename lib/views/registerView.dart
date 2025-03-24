@@ -1,80 +1,58 @@
 import 'package:flutter/material.dart';
-import '../services/authService.dart';
+import 'package:provider/provider.dart';
+import '../viewmodels/registerViewModel.dart';
 
-class RegisterView extends StatefulWidget {
-  const RegisterView({Key? key}) : super(key: key);
-
-  @override
-  State<RegisterView> createState() => _RegisterViewState();
-}
-
-class _RegisterViewState extends State<RegisterView> {
-  final _userEmailController = TextEditingController();
-  final _userPasswordController = TextEditingController();
-  final _userNameController = TextEditingController();
-
-  final _authService = AuthService();
-
-  bool _loading = false;
-  String? _error;
-
-  void _register() async {
-    setState(() {
-      _loading = true;
-      _error = null;
-    });
-
-    final user = await _authService.register(
-      userEmail: _userEmailController.text.trim(),
-      userPassword: _userPasswordController.text.trim(),
-      userName: _userNameController.text.trim(),
-    );
-
-    setState(() {
-      _loading = false;
-    });
-
-    if (user != null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Kayıt başarılı! 👏')),
-      );
-    } else {
-      setState(() {
-        _error = 'Kayıt başarısız. Tekrar dene.';
-      });
-    }
-  }
+class RegisterView extends StatelessWidget {
+  const RegisterView({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final registerVM = Provider.of<RegisterViewModel>(context);
+    final _userNameController = TextEditingController();
+    final _userEmailController = TextEditingController();
+    final _userPasswordController = TextEditingController();
+
     return Scaffold(
-      appBar: AppBar(title: Text('Kayıt Ol')),
+      appBar: AppBar(title: const Text('Kayıt Ol')),
       body: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
           children: [
             TextField(
               controller: _userNameController,
-              decoration: InputDecoration(labelText: 'İsim'),
+              decoration: const InputDecoration(labelText: 'İsim'),
             ),
             TextField(
               controller: _userEmailController,
-              decoration: InputDecoration(labelText: 'Email'),
+              decoration: const InputDecoration(labelText: 'Email'),
               keyboardType: TextInputType.emailAddress,
             ),
             TextField(
               controller: _userPasswordController,
-              decoration: InputDecoration(labelText: 'Şifre'),
+              decoration: const InputDecoration(labelText: 'Şifre'),
               obscureText: true,
             ),
-            SizedBox(height: 20),
-            if (_error != null)
-              Text(_error!, style: TextStyle(color: Colors.red)),
-            _loading
-                ? CircularProgressIndicator()
+            const SizedBox(height: 20),
+            if (registerVM.errorMessage != null)
+              Text(registerVM.errorMessage!, style: const TextStyle(color: Colors.red)),
+            registerVM.isLoading
+                ? const CircularProgressIndicator()
                 : ElevatedButton(
-              onPressed: _register,
-              child: Text('Kayıt Ol'),
+              onPressed: () async {
+                await registerVM.register(
+                  userName: _userNameController.text.trim(),
+                  userEmail: _userEmailController.text.trim(),
+                  userPassword: _userPasswordController.text.trim(),
+                );
+
+                if (registerVM.user != null) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Kayıt başarılı! 👏')),
+                  );
+                  // TODO: Navigate to home
+                }
+              },
+              child: const Text('Kayıt Ol'),
             ),
           ],
         ),
