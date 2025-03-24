@@ -3,7 +3,7 @@ import '../services/authService.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../viewmodels/loginViewModel.dart';
-
+import 'main/mainPageView.dart';
 class LoginView extends StatelessWidget {
   const LoginView({super.key});
 
@@ -45,7 +45,10 @@ class LoginView extends StatelessWidget {
                     const SnackBar(content: Text("Giriş başarılı!")),
                   );
                   // TODO: Navigate to Home Page
-                }
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const MainPageView()),
+                  );                }
               },
               child: const Text('Giriş Yap'),
             ),

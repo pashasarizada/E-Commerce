@@ -2,11 +2,11 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'firebase_options.dart';
 import 'package:provider/provider.dart';
-import 'package:ecom/views/registerView.dart';
-import 'package:ecom/views/loginView.dart';
+import 'package:ecom/views/registerPageView.dart';
+import 'package:ecom/views/loginPageView.dart';
 import 'package:ecom/viewmodels/loginViewModel.dart';
 import 'package:ecom/viewmodels/registerViewModel.dart';
-import 'package:ecom/views/welcomeView.dart';
+import 'package:ecom/views/welcomePageView.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
