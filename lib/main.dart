@@ -1,26 +1,24 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-
 import 'firebase_options.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-
-void main() async{
+import 'package:ecom/views/registerView.dart';
+import 'package:ecom/views/loginView.dart';
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   try {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
-     print('basarili aga');
-  } catch  (e){
-     print('basarisiz aga');
+    print('başarılı aga');
+  } catch (e) {
+    print('başarısız aga: $e');
   }
-  await sendDummyUserToFirestore();
 
-  runApp( MyApp());
-
+  runApp(MaterialApp(home: LoginView(), debugShowCheckedModeBanner: false,));
 }
-Future<void> sendDummyUserToFirestore() async {
+
+/*Future<void> sendDummyUserToFirestore() async {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   final dummyUser = {
@@ -43,14 +41,4 @@ Future<void> sendDummyUserToFirestore() async {
   await firestore.collection('users').doc(dummyUser['userId'] as String).set(dummyUser);
   print("Kullanıcı gönderildi.");
 }
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        body: Center(child: Text('Firestore Veri Gönderildi')),
-      ),
-    );
-  }
-}
+*/

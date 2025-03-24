@@ -1,10 +1,8 @@
-
-class UserOrder{
-
+class UserOrderModel {
   final String productId;
   final int quantity;
 
-  UserOrder(this.productId, this.quantity);
+  UserOrderModel(this.productId, this.quantity);
 
   Map<String, dynamic> toMap() {
     return {
@@ -13,8 +11,8 @@ class UserOrder{
     };
   }
 
-  factory UserOrder.fromMap(Map<String, dynamic> map) {
-    return UserOrder(
+  factory UserOrderModel.fromMap(Map<String, dynamic> map) {
+    return UserOrderModel(
       map['productId'],
       map['quantity'],
     );
