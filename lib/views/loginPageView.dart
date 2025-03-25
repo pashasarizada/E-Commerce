@@ -4,6 +4,7 @@ import '../viewmodels/loginViewModel.dart';
 import '../views/main/mainPageView.dart';
 import '../widgets/customButton.dart';
 import 'package:ecom/widgets/appGradient.dart';
+import 'package:ecom/widgets/customTextField.dart';
 
 class LoginView extends StatelessWidget {
   const LoginView({super.key});
@@ -19,7 +20,7 @@ class LoginView extends StatelessWidget {
         width: double.infinity,
         height: double.infinity,
         decoration: const BoxDecoration(
-          gradient: AppGradients.registerGradient,
+          gradient: AppGradients.welcomeGreenGradient,
         ),
         child: SafeArea(
           child: Padding(
@@ -28,7 +29,7 @@ class LoginView extends StatelessWidget {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    const Icon(Icons.lock_outline, size: 80, color: Colors.white),
+                    const Icon(Icons.shopping_bag_outlined, size: 100, color: Colors.white70),
                     const SizedBox(height: 20),
                     const Text(
                       'Log in ',
@@ -45,29 +46,19 @@ class LoginView extends StatelessWidget {
                     ),
                     const SizedBox(height: 30),
 
-                    // Email
-                    TextField(
+                    CustomTextField(
+                      hintText: 'Email',
                       controller: _emailController,
-                      decoration: InputDecoration(
-                        labelText: 'Email',
-                        filled: true,
-                        fillColor: Colors.white,
-                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-                      ),
-                      keyboardType: TextInputType.emailAddress,
+                      inputType: TextInputType.emailAddress,
+                      icon: Icons.email,
                     ),
                     const SizedBox(height: 15),
 
-                    // Password
-                    TextField(
+                    CustomTextField(
+                      hintText: 'Password',
                       controller: _passwordController,
-                      decoration: InputDecoration(
-                        labelText: 'Password',
-                        filled: true,
-                        fillColor: Colors.white,
-                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-                      ),
                       obscureText: true,
+                      icon: Icons.lock,
                     ),
                     const SizedBox(height: 20),
 
