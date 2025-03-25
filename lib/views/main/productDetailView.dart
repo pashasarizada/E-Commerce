@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ecom/widgets/appGradient.dart';
 
 class ProductDetailView extends StatelessWidget {
   final Map<String, dynamic> product;
@@ -15,22 +16,116 @@ class ProductDetailView extends StatelessWidget {
     final owner = product['ownerEmail'] ?? 'Bilinmiyor';
 
     return Scaffold(
-      appBar: AppBar(title: Text(title)),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Image.network(imageUrl),
-            const SizedBox(height: 16),
-            Text("\$ $price", style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-            const SizedBox(height: 8),
-            Text(desc),
-            const SizedBox(height: 8),
-            Text("Konum: $location"),
-            const SizedBox(height: 8),
-            Text("İlan Sahibi: $owner"),
-          ],
+      appBar: AppBar(
+        backgroundColor: Colors.green,
+        elevation: 10,
+       // title: Text(title),
+        leading: BackButton(color: Colors.white),),
+      body: Container(
+        height: double.infinity,
+        decoration: const BoxDecoration(
+          gradient: AppGradients.welcomeGreenGradient,
+        ),
+        child: SafeArea(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(16),
+                  child: Image.network(
+                    imageUrl,
+                    height: 350,
+                    width: double.infinity,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                const SizedBox(height: 24),
+
+                Text(
+                  title,
+                  style: const TextStyle(
+                    fontSize: 30,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                    letterSpacing: 0.5,
+                  ),
+                ),
+
+                const SizedBox(height: 12),
+
+                Text(
+                  "\$ $price",
+                  style: const TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.amberAccent,
+                  ),
+                ),
+
+                const SizedBox(height: 16),
+
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(12),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.2),
+                        blurRadius: 8,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
+                  ),
+                  child: Text(
+                    desc,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      color: Colors.white70,
+                      height: 1.4,
+                    ),
+                  ),
+                ),
+
+                const SizedBox(height: 16),
+
+                Text("📍 Konum: $location", style: const TextStyle(color: Colors.white,fontSize: 20)),
+                const SizedBox(height: 4),
+                Text("👤 İlan Sahibi: $owner", style: const TextStyle(color: Colors.white,fontSize: 20)),
+
+                const SizedBox(height: 36),
+
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton.icon(
+                    onPressed: () {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Ürün sepete eklendi! 🛒')),
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      backgroundColor: Colors.white,
+                      foregroundColor: Colors.green,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      elevation: 5,
+                    ),
+                    icon: const Icon(Icons.add_shopping_cart),
+                    label: const Text(
+                      "Sepete Ekle",
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );
