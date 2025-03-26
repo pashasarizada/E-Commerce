@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ecom/widgets/appGradient.dart';
+import 'package:ecom/services/userOrderService.dart';
+import 'package:ecom/models/userOrderModel.dart';
 
 class ProductDetailView extends StatelessWidget {
   final Map<String, dynamic> product;
@@ -85,7 +87,7 @@ class ProductDetailView extends StatelessWidget {
                     desc,
                     style: const TextStyle(
                       fontSize: 16,
-                      color: Colors.white70,
+                      color: Colors.white,
                       height: 1.4,
                     ),
                   ),
@@ -102,12 +104,29 @@ class ProductDetailView extends StatelessWidget {
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton.icon(
-                    onPressed: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Ürün sepete eklendi! 🛒')),
-                      );
-                    },
-                    style: ElevatedButton.styleFrom(
+
+                      onPressed: () async {
+                        // Ürün kimliğini al - hem içinden hem yedeğe düş
+                        final productId = product['productId'] ?? product['id'] ?? '';
+
+                        if (productId.isEmpty) {
+                          // Hatalı ürün, sepete eklenmesin
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Ürün kimliği bulunamadı ❌')),
+                          );
+                          return;
+                        }
+
+                        final orderItem = UserOrderModel(productId, 1);
+
+                        await UserOrderService().addProductToUser(orderItem);
+
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Ürün sepete eklendi! 🛒')),
+                        );
+                      },
+
+                      style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       backgroundColor: Colors.white,
                       foregroundColor: Colors.green,

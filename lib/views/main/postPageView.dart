@@ -5,7 +5,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../services/imageUploadService.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
+import 'package:ecom/services/productService.dart';
 class PostPageView extends StatefulWidget {
   const PostPageView({super.key});
 
@@ -36,7 +36,6 @@ class _PostPageViewState extends State<PostPageView> {
       });
     }
   }
-
   Future<void> _submitProduct() async {
     final title = _titleController.text.trim();
     final desc = _descriptionController.text.trim();
@@ -60,21 +59,23 @@ class _PostPageViewState extends State<PostPageView> {
         if (url != null) imageUrls.add(url);
       }
 
-      await FirebaseFirestore.instance.collection('products').add({
-        'title': title,
-        'description': desc,
-        'price': double.parse(price),
-        'location': location.isEmpty ? null : location,
-        'imageUrls': imageUrls,
-        'createdAt': Timestamp.now(),
-        'ownerId': currentUser?.uid,
-        'ownerEmail': currentUser?.email,
-      });
-
+      await ProductService().addProduct(
+        title: title,
+        description: desc,
+        price: double.parse(price),
+        location: location.isEmpty ? null : location,
+        imageUrls: imageUrls,
+      );
 
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Ürün başarıyla yayınlandı!')),
       );
+
+      _titleController.clear();
+      _descriptionController.clear();
+      _priceController.clear();
+      _locationController.clear();
+      setState(() => _selectedImages.clear());
 
     } catch (e) {
       print('HATA: $e');
