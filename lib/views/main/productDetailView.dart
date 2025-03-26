@@ -15,7 +15,7 @@ class ProductDetailView extends StatelessWidget {
     final desc = product['description'];
     final price = product['price'];
     final location = product['location'];
-    final owner = product['ownerEmail'] ?? 'Bilinmiyor';
+    final owner = product['ownerEmail'] ?? 'Anonymous';
 
     return Scaffold(
       appBar: AppBar(
@@ -106,13 +106,11 @@ class ProductDetailView extends StatelessWidget {
                   child: ElevatedButton.icon(
 
                       onPressed: () async {
-                        // Ürün kimliğini al - hem içinden hem yedeğe düş
                         final productId = product['productId'] ?? product['id'] ?? '';
 
                         if (productId.isEmpty) {
-                          // Hatalı ürün, sepete eklenmesin
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Ürün kimliği bulunamadı ❌')),
+                            const SnackBar(content: Text('Product ID not found" ❌')),
                           );
                           return;
                         }
@@ -122,7 +120,7 @@ class ProductDetailView extends StatelessWidget {
                         await UserOrderService().addProductToUser(orderItem);
 
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Ürün sepete eklendi! 🛒')),
+                          const SnackBar(content: Text('Order has been successfully added! 🛒')),
                         );
                       },
 
@@ -137,7 +135,7 @@ class ProductDetailView extends StatelessWidget {
                     ),
                     icon: const Icon(Icons.add_shopping_cart),
                     label: const Text(
-                      "Sepete Ekle",
+                      "Order now",
                       style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                   ),

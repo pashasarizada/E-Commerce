@@ -10,9 +10,9 @@ class HomePageView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Ürünler",style: TextStyle(color: Colors.white),),
+        title: const Text("Products",style: TextStyle(color: Colors.white),),
         backgroundColor: Colors.transparent,
-        elevation: 0,
+        elevation: 5,
         automaticallyImplyLeading: false,
       ),
       extendBodyBehindAppBar: true,
@@ -32,14 +32,14 @@ class HomePageView extends StatelessWidget {
 
             if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
               return const Center(
-                child: Text("Hiç ürün yok", style: TextStyle(color: Colors.white)),
+                child: Text("No any product available", style: TextStyle(color: Colors.white)),
               );
             }
 
             final products = snapshot.data!.docs;
 
             return GridView.builder(
-              padding: const EdgeInsets.fromLTRB(16, 100, 16, 16), // AppBar'dan dolayı üst boşluk
+              padding: const EdgeInsets.fromLTRB(16, 100, 16, 16),
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
                 crossAxisSpacing: 14,
@@ -52,7 +52,7 @@ class HomePageView extends StatelessWidget {
                 final imageUrl = data['imageUrls'][0];
                 final title = data['title'];
                 final price = data['price'];
-                final owner = data['ownerEmail'] ?? 'Bilinmiyor';
+                final owner = data['ownerEmail'] ?? 'Anonymous';
 
                 return GestureDetector(
                   onTap: () {
